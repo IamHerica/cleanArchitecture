@@ -13,8 +13,8 @@ namespace CleanArch.Infra.Context
         //Mapeamento ORM
         //Mapeando a propriedade Category para a tabela Categories
         //Mapeando a propriedade Product para a tabela Products
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; private set; }
+        public DbSet<Category> Categories { get; private set; }
 
         //Configurações das entidades
         //Permite configurar o modelo usando as configurações feitas no ApplicationDbContext

@@ -4,9 +4,11 @@ using CleanArch.Application.Services;
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Context;
 using CleanArch.Infra.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CleanArchInfra.IoC
 {
@@ -27,6 +29,8 @@ namespace CleanArchInfra.IoC
 
             //Registrando AutoMapper
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;
         }

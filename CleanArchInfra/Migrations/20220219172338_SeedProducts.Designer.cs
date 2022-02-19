@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArch.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220126233523_SeedProducts")]
+    [Migration("20220219172338_SeedProducts")]
     partial class SeedProducts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
