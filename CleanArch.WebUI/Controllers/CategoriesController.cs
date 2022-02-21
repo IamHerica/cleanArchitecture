@@ -31,12 +31,27 @@ namespace CleanArch.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryDTO category)
         {
+            //Validações dos DataAnnotations
             if (ModelState.IsValid)
             {
                 await _categoryService.Add(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            //ViewModel porque está vindo da web
+            var categoryViewModel = await _categoryService.GetById(id);
+
+            if(categoryViewModel == null)return NotFound();
+
+            return View(categoryViewModel);
         }
 
 
