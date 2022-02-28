@@ -1,6 +1,7 @@
 ﻿using CleanArch.Application.DTOs;
 using CleanArch.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace CleanArch.WebUI.Controllers
@@ -49,9 +50,65 @@ namespace CleanArch.WebUI.Controllers
             //ViewModel porque está vindo da web
             var categoryViewModel = await _categoryService.GetById(id);
 
-            if(categoryViewModel == null)return NotFound();
+            if (categoryViewModel == null) return NotFound();
 
             return View(categoryViewModel);
+
+        }
+        
+        //edicao de categoria 
+        [HttpPost()]
+        public async Task<IActionResult> Edit(CategoryDTO categoryDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _categoryService.Update(categoryDTO);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(categoryDTO);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var categoryDto = await _categoryService.GetById(id);
+
+            if(categoryDto == null) return NotFound();
+
+            return View(categoryDto);
+        }
+
+        [HttpPost(), ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            await _categoryService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var categoryDto = await _categoryService.GetById(id);
+
+            if (categoryDto == null)
+                return NotFound();
+
+            return View(categoryDto);
+
         }
 
 
