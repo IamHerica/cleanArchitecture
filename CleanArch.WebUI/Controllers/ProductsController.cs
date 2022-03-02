@@ -1,7 +1,9 @@
 ﻿using CleanArch.Application.DTOs;
 using CleanArch.Application.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CleanArch.WebUI.Controllers
@@ -10,11 +12,13 @@ namespace CleanArch.WebUI.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IWebHostEnvironment _environment;
 
-        public ProductsController(IProductService productService, ICategoryService categoryService)
+        public ProductsController(IProductService productService, ICategoryService categoryService, IWebHostEnvironment environment)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -48,7 +52,7 @@ namespace CleanArch.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id == null) return NotFound();
+            if (id == null) return NotFound();
             var productDto = await _productService.GetById(id);
 
             if (productDto == null) return NotFound();
@@ -74,6 +78,44 @@ namespace CleanArch.WebUI.Controllers
             return View(productDto);
         }
 
-       
+
+        //Selecionar o produto da lista de produtos e apresentar a view responsavel por confirmar se deseja deletar
+        //E receber o Id
+        [HttpGet()]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var productDto = await _productService.GetById(id);
+
+            if(productDto == null) return NotFound();
+
+            return View(productDto);
+        }
+
+        //Recebe o post e mapeia para remover o produto
+        [HttpPost(), ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            await _productService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if(id == null) return NotFound();
+            var productDto = await _productService.GetById(id);
+
+            if (productDto == null) return NotFound();
+
+            var wwwrot = _environment.WebRootPath;
+            var image = Path.Combine(wwwrot, "images\\" + productDto.Image);
+            var exists = System.IO.File.Exists(image);
+            ViewBag.ImageExist = exists;
+
+            return View(productDto);
+        }
+
+
     }
 }
