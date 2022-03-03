@@ -1,12 +1,15 @@
 ﻿using CleanArch.Domain.Entities;
+using CleanArch.Infra.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infra.Context
 {
-    public class ApplicationDbContext : DbContext
+    //public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         //Conexão com o bando de dados usando EF
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
 

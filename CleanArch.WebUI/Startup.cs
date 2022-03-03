@@ -24,6 +24,8 @@ namespace CleanArch.WebUI
             services.AddInfrastructure(Configuration);
             services.AddControllersWithViews();
 
+            //Define e registra o esquema de autenticação a ser usado pelo middleware(Cookie, JWT Bearer..)
+            services.AddAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +46,11 @@ namespace CleanArch.WebUI
 
             app.UseRouting();
 
+            //Registra o middleare de autenticação que usa o esquema de autenticação registrado
+            //Deve ser usado antes de qualquer middleware que depende de usuários autenticados
+            app.UseAuthentication();
+
+            //Habilita o middleware de autorização que autoriza um usuário a acessar recursos seguros
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
